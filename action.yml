@@ -1,16 +1,32 @@
 # action.yml
 name: 'markdown-confluence/publish'
-description: 'Greet someone and record the time'
+description: 'Publish Markdown files to Confluence'
+branding:
+  icon: 'file-text'
+  color: 'green'
 inputs:
-  who-to-greet:  # id of input
+  confluenceBaseUrl:
     description: 'Who to greet'
-    required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  confluenceParentId: 
+    description: ''
+  atlassianUserName: 
+    description: ''
+  atlassianApiToken:
+    description: ''
+  folderToPublish:
+    description: ''
+  contentRoot:
+    description: ''
+  configFile:
+    description: ''
 runs:
   using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.who-to-greet }}
+  image: 'docker://ghcr.io/markdown-confluence/publish:4'
+  env:
+    CONFLUENCE_BASE_URL: ${{ inputs.confluenceBaseUrl }}
+    CONFLUENCE_PARENT_ID: ${{ inputs.confluenceParentId }}
+    ATLASSIAN_USERNAME: ${{ inputs.atlassianUserName }}
+    ATLASSIAN_API_TOKEN: ${{ inputs.atlassianApiToken }}
+    FOLDER_TO_PUBLISH: ${{ inputs.folderToPublish }}
+    CONFLUENCE_CONTENT_ROOT: ${{ inputs.contentRoot }}
+    CONFLUENCE_CONFIG_FILE: ${{ inputs.configFile }}
