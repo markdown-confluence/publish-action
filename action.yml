@@ -21,7 +21,7 @@ inputs:
     description: ''
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/markdown-confluence/publish:4'
+  image: 'Dockerfile'
   env:
     CONFLUENCE_BASE_URL: ${{ inputs.confluenceBaseUrl }}
     CONFLUENCE_PARENT_ID: ${{ inputs.confluenceParentId }}
