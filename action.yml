@@ -1,4 +1,4 @@
-name: 'markdown-confluence'
+name: 'markdown-confluence/publish'
 description: 'Publish Markdown files to Confluence'
 branding:
   icon: 'file-text'
