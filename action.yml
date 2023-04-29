@@ -6,19 +6,25 @@ branding:
   color: 'green'
 inputs:
   confluenceBaseUrl:
-    description: 'Who to greet'
-  confluenceParentId: 
-    description: ''
-  atlassianUserName: 
-    description: ''
+    description: 'The base URL of your Confluence instance, used for API calls and publishing content.'
+
+  confluenceParentId:
+    description: 'The ID of the parent page in Confluence where the Markdown files will be published as child pages.'
+
+  atlassianUserName:
+    description: 'Your Atlassian account's username, required for authentication when interacting with Confluence.'
+
   atlassianApiToken:
-    description: ''
+    description: 'An API token generated for your Atlassian account, used for authentication when making API calls to Confluence.'
+
   folderToPublish:
-    description: ''
+    description: 'The folder you want to apply a default of "connie-publish: true" to.'
+
   contentRoot:
-    description: ''
+    description: 'The root path for published content on Confluence. This is used to tell the action where to look for Markdown files and content.'
+
   configFile:
-    description: ''
+    description: 'A configuration file containing additional settings and customizations for the publishing process.'
 runs:
   using: 'docker'
   image: 'Dockerfile'
