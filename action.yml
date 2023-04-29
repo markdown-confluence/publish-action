@@ -1,4 +1,4 @@
-name: 'markdown-confluence/publish'
+name: 'markdown-confluence'
 description: 'Publish Markdown files to Confluence'
 branding:
   icon: 'file-text'
@@ -9,7 +9,7 @@ inputs:
   confluenceParentId:
     description: 'The ID of the parent page in Confluence where the Markdown files will be published as child pages.'
   atlassianUserName:
-    description: 'Your Atlassian account's username, required for authentication when interacting with Confluence.'
+    description: 'Your Atlassian account''s username, required for authentication when interacting with Confluence.'
   atlassianApiToken:
     description: 'An API token generated for your Atlassian account, used for authentication when making API calls to Confluence.'
   folderToPublish:
