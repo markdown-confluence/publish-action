@@ -1,4 +1,4 @@
-FROM ghcr.io/markdown-confluence/publish:4
+FROM ghcr.io/markdown-confluence/publish:5
 
 USER root
 
