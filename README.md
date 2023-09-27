@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish@v1
+        uses: markdown-confluence/publish-action@v5
         with:
           confluenceBaseUrl: https://your-confluence-instance-url
           confluenceParentId: 123456
@@ -56,7 +56,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish@v1
+        uses: markdown-confluence/publish-action@v5
         with:
           configFile: .markdown-confluence.json
           atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
@@ -160,7 +160,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish@v1
+        uses: markdown-confluence/publish-action@v5
         with:
           confluenceBaseUrl: https://your-confluence-instance-url
           confluenceParentId: 123456
