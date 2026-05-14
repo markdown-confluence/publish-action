@@ -5,17 +5,17 @@ branding:
   color: 'green'
 inputs:
   confluenceBaseUrl:
-    description: 'The base URL of your Confluence instance, used for API calls and publishing content.'
+    description: 'The base URL of your Confluence instance. For Confluence Cloud, use the Atlassian site URL without /wiki, for example https://your-domain.atlassian.net.'
   confluenceParentId:
-    description: 'The ID of the parent page in Confluence where the Markdown files will be published as child pages.'
+    description: 'The ID of the existing parent page in Confluence where Markdown files will be published as child pages. The parent page determines the target space.'
   atlassianUserName:
     description: 'Your Atlassian account''s username, required for authentication when interacting with Confluence.'
   atlassianApiToken:
     description: 'An API token generated for your Atlassian account, used for authentication when making API calls to Confluence.'
   folderToPublish:
-    description: 'The folder you want to apply a default of "connie-publish: true" to.'
+    description: 'The folder, relative to contentRoot, that should default to connie-publish: true.'
   contentRoot:
-    description: 'The root path for published content on Confluence. This is used to tell the action where to look for Markdown files and content.'
+    description: 'The root path the action searches for Markdown files and referenced content. Use . for the checked-out repository.'
   configFile:
     description: 'A configuration file containing additional settings and customizations for the publishing process.'
 runs:

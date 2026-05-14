@@ -1,4 +1,4 @@
-# markdown-confluence/publish GitHub Action
+# markdown-confluence/publish-action GitHub Action
 
 This GitHub Action wraps up an NPM CLI that allows you to publish your Markdown files to Confluence quickly and easily. By using this action in your workflows, you can automate the process of publishing documentation to Confluence, making it faster, more streamlined, and more efficient.
 
@@ -17,15 +17,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish@v1
+        uses: markdown-confluence/publish-action@v5
         with:
-          confluenceBaseUrl: https://your-confluence-instance-url
+          confluenceBaseUrl: https://your-domain.atlassian.net
           confluenceParentId: 123456
           atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
           atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
+          folderToPublish: docs
+          contentRoot: .
 ```
 
 ### Example using a config file
@@ -34,11 +36,11 @@ Create a `.markdown-confluence.json` file in your repository with the following 
 
 ```json
 {
-  "confluenceBaseUrl": "https://your-confluence-instance-url",
+  "confluenceBaseUrl": "https://your-domain.atlassian.net",
   "confluenceParentId": "123456",
   "atlassianUserName": "your-email@example.com",
   "folderToPublish": "docs",
-  "contentRoot": "/docs"
+  "contentRoot": "."
 }
 ```
 
@@ -53,10 +55,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish@v1
+        uses: markdown-confluence/publish-action@v5
         with:
           configFile: .markdown-confluence.json
           atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
@@ -69,18 +71,18 @@ This section provides an overview of all the input options available for the `ma
 
 ### confluenceBaseUrl
 
-The base URL of your Confluence instance, used for API calls and publishing content. This value should include the protocol (e.g., `https://`) but not a trailing slash.
+The base URL of your Confluence instance, used for API calls and publishing content. For Confluence Cloud, use the Atlassian site URL without `/wiki` and without a trailing slash.
 
 Example:
 
 ```yaml
 with:
-  confluenceBaseUrl: https://your-confluence-instance-url
+  confluenceBaseUrl: https://your-domain.atlassian.net
 ```
 
 ### confluenceParentId
 
-The ID of the parent page in Confluence where the Markdown files will be published as child pages.
+The ID of an existing Confluence page where the Markdown files will be published as child pages. The action uses this page to determine the target Confluence space; there is no separate `spaceKey` input.
 
 Example:
 
@@ -113,7 +115,7 @@ with:
 
 ### folderToPublish
 
-The folder you want to apply a default of "connie-publish: true" to. All Markdown files within this folder will be considered for publishing.
+The folder you want to apply a default of `connie-publish: true` to. It is evaluated relative to `contentRoot`. All Markdown files under this folder will be considered for publishing unless their frontmatter sets `connie-publish: false`.
 
 Example:
 
@@ -124,13 +126,13 @@ with:
 
 ### contentRoot
 
-The root path for published content on Confluence. This is used to tell the action where to look for Markdown files and content.
+The root path the action searches for Markdown files and referenced content. In GitHub Actions this is usually `.` for the checked-out repository, or a subdirectory such as `docs` when all publishable files live there.
 
 Example:
 
 ```yaml
 with:
-  contentRoot: /docs
+  contentRoot: .
 ```
 
 ### configFile
@@ -157,21 +159,54 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish@v1
+        uses: markdown-confluence/publish-action@v5
         with:
-          confluenceBaseUrl: https://your-confluence-instance-url
+          confluenceBaseUrl: https://your-domain.atlassian.net
           confluenceParentId: 123456
           atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
           atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
           folderToPublish: docs
-          contentRoot: /docs
+          contentRoot: .
           configFile: .markdown-confluence.json
 ```
 
 Remember to create and configure the `.markdown-confluence.json` file in your repository as needed.
+
+## Troubleshooting
+
+### Error: Missing Space Key
+
+The action does not require a `spaceKey` setting. It reads the space key from the Confluence parent page identified by `confluenceParentId`.
+
+If you see `Error: Missing Space Key`, check that:
+
+- `confluenceParentId` is the numeric ID of an existing page, not the page title or URL.
+- `confluenceBaseUrl` is the Atlassian site URL, for example `https://your-domain.atlassian.net`, without `/wiki`.
+- `atlassianUserName` and `atlassianApiToken` belong to a user that can view the parent page and create child pages in that space.
+- The parent page is in the Confluence site configured by `confluenceBaseUrl`.
+
+### `folderToPublish` vs `contentRoot`
+
+Use `contentRoot` to choose the directory the action scans. Use `folderToPublish` to choose which Markdown files under that root are published by default.
+
+For example, this scans the whole repository but publishes files under `docs`:
+
+```yaml
+with:
+  contentRoot: .
+  folderToPublish: docs
+```
+
+This scans only the `docs` directory and publishes every Markdown file found there:
+
+```yaml
+with:
+  contentRoot: docs
+  folderToPublish: .
+```
 
 ### Storing API token as a repository secret
 
