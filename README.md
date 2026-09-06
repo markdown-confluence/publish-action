@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish-action@v5
+        uses: markdown-confluence/publish-action@v6
         with:
           confluenceBaseUrl: https://your-domain.atlassian.net
           confluenceParentId: 123456
@@ -55,10 +55,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish-action@v5
+        uses: markdown-confluence/publish-action@v6
         with:
           configFile: .markdown-confluence.json
           atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
@@ -159,10 +159,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish-action@v5
+        uses: markdown-confluence/publish-action@v6
         with:
           confluenceBaseUrl: https://your-domain.atlassian.net
           confluenceParentId: 123456
@@ -228,3 +228,13 @@ If you need help with using this action or encounter any issues, please open an 
 ## License
 
 This GitHub Action is released under the Apache 2.0 License.
+
+## Version 6
+
+This action uses the immutable `ghcr.io/markdown-confluence/publish:6.0.0` container, with Node.js 24.15.0 and Debian Chromium. The action runs as root to write page IDs and URLs to GitHub's mounted checkout.
+
+Use `confluenceAuthType: oauth2`, `atlassianClientId` and `atlassianClientSecret` for service-account authentication. Set `confluenceBaseUrl` to the Atlassian API gateway and `confluenceSiteUrl` to the browsable site. Basic API tokens remain the default.
+
+`tagsToPublish` selects additional YAML-tagged notes. `mermaidProtocolTimeout` raises the rendering timeout for large diagrams. PlantUML is opt-in through `plantumlEnabled` and `plantumlServerUrl`; source text is sent to that server. Other settings, including page headers, footers and ignored languages, can be supplied in the configuration file.
+
+Read the [version 6 migration guide](https://github.com/markdown-confluence/markdown-confluence/blob/main/documentation/MIGRATING_TO_6.md) before updating an existing publishing tree.

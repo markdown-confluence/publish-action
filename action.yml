@@ -18,6 +18,26 @@ inputs:
     description: 'The root path the action searches for Markdown files and referenced content. Use . for the checked-out repository.'
   configFile:
     description: 'A configuration file containing additional settings and customizations for the publishing process.'
+  confluenceSiteUrl:
+    description: "Browsable Confluence site URL when the API base URL is an OAuth gateway."
+  confluenceAuthType:
+    description: "Authentication method: basic, bearer or oauth2."
+  atlassianClientId:
+    description: "OAuth service-account client ID. Store credentials in GitHub secrets."
+  atlassianClientSecret:
+    description: "OAuth service-account client secret."
+  confluenceApiPrefix:
+    description: "Optional REST API prefix for custom endpoints."
+  confluenceRequestHeaders:
+    description: "Optional JSON object of extra request headers."
+  tagsToPublish:
+    description: "Comma-separated YAML tags selecting additional notes."
+  mermaidProtocolTimeout:
+    description: "Positive Puppeteer protocol timeout in milliseconds; default 180000."
+  plantumlEnabled:
+    description: "Enable PlantUML rendering explicitly; diagram source goes to the configured server."
+  plantumlServerUrl:
+    description: "PlantUML server trusted to receive diagram source."
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -29,3 +49,13 @@ runs:
     FOLDER_TO_PUBLISH: ${{ inputs.folderToPublish }}
     CONFLUENCE_CONTENT_ROOT: ${{ inputs.contentRoot }}
     CONFLUENCE_CONFIG_FILE: ${{ inputs.configFile }}
+    CONFLUENCE_SITE_URL: ${{ inputs.confluenceSiteUrl }}
+    CONFLUENCE_AUTH_TYPE: ${{ inputs.confluenceAuthType }}
+    ATLASSIAN_CLIENT_ID: ${{ inputs.atlassianClientId }}
+    ATLASSIAN_CLIENT_SECRET: ${{ inputs.atlassianClientSecret }}
+    CONFLUENCE_API_PREFIX: ${{ inputs.confluenceApiPrefix }}
+    CONFLUENCE_REQUEST_HEADERS: ${{ inputs.confluenceRequestHeaders }}
+    CONFLUENCE_TAGS_TO_PUBLISH: ${{ inputs.tagsToPublish }}
+    CONFLUENCE_MERMAID_PROTOCOL_TIMEOUT: ${{ inputs.mermaidProtocolTimeout }}
+    CONFLUENCE_PLANTUML_ENABLED: ${{ inputs.plantumlEnabled }}
+    CONFLUENCE_PLANTUML_SERVER_URL: ${{ inputs.plantumlServerUrl }}

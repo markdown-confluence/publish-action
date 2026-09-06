@@ -1,0 +1,8 @@
+{
+  "release-type": "simple",
+  "include-component-in-tag": false,
+  "bootstrap-sha": "7767a0a7f438bb1497ee7ffd7d3d685b81dfe700",
+  "packages": {
+    ".": {}
+  }
+}
