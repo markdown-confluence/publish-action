@@ -1,47 +1,49 @@
+name: release-please
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
 permissions:
   contents: read
-
-name: release-please
-
+concurrency:
+  group: publish-action-release
+  cancel-in-progress: false
 jobs:
-  release-please:
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
-
+      issues: write
     steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
-        with:
-          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
-
-      - name: Checkout repository
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-
-      - id: release-please
-        uses: google-github-actions/release-please-action@c078ea33917ab8cfa5300e48f4b7e6b16606aede # v3.7.8
+      - name: Prepare or create the release
+        id: release
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         with:
           token: ${{ secrets.RELEASE_PLEASE_PAT }}
-          release-type: node
-          package-name: ${{env.ACTION_NAME}}
-          command: github-release
-      - name: tag major and minor versions
-        if: ${{ steps.release.outputs.release_created }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+      - name: Checkout the released action
+        if: steps.release.outputs.release_created == 'true'
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ steps.release.outputs.tag_name }}
+          persist-credentials: false
+      - name: Verify the pinned container and update version aliases
+        if: steps.release.outputs.release_created == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.release.outputs.version }}
         run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git remote add gh-token "https://${{ secrets.GITHUB_TOKEN }}@github.com/google-github-actions/release-please-action.git"
-          git tag -d v${{ steps.release.outputs.major }} || true
-          git tag -d v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
-          git push origin :v${{ steps.release.outputs.major }} || true
-          git push origin :v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
-          git tag -a v${{ steps.release.outputs.major }} -m "Release v${{ steps.release.outputs.major }}"
-          git tag -a v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} -m "Release v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}"
-          git push origin v${{ steps.release.outputs.major }}
-          git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
+          set -euo pipefail
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          image=$(awk '$1 == "FROM" {print $2}' Dockerfile)
+          [[ "$image" =~ ^ghcr.io/markdown-confluence/publish:[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          docker buildx imagetools inspect "$image" --raw | jq -e '.manifests | any(.platform.architecture == "amd64") and any(.platform.architecture == "arm64")'
+          sha=$(git rev-parse HEAD)
+          for alias in "v${VERSION%%.*}" "v${VERSION%.*}"; do
+            if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$alias" >/dev/null 2>&1; then
+              gh api --method PATCH "repos/$GITHUB_REPOSITORY/git/refs/tags/$alias" -f sha="$sha" -F force=true >/dev/null
+            else
+              gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$alias" -f sha="$sha" >/dev/null
+            fi
+          done
