@@ -1,0 +1,8 @@
+{
+	"name": "publish-action-contract",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"test": "node --test test/*.test.mjs"
+	}
+}

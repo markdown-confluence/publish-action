@@ -1,0 +1,17 @@
+name: Verify action contract
+on:
+    pull_request:
+    push:
+        branches: [main]
+permissions:
+    contents: read
+jobs:
+    contract:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+            - uses: voidzero-dev/setup-vp@ca1c46663915d6c1042ae23bd39ab85718bfb0fa
+              with:
+                  node-version: "24.15.0"
+                  run-install: false
+            - run: vp run test
