@@ -13,21 +13,21 @@ name: Publish to Confluence
 on: push
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-      
-      - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish-action@v6
-        with:
-          confluenceBaseUrl: https://your-domain.atlassian.net
-          confluenceParentId: 123456
-          atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
-          atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
-          folderToPublish: docs
-          contentRoot: .
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Publish Markdown to Confluence
+              uses: markdown-confluence/publish-action@v7
+              with:
+                  confluenceBaseUrl: https://your-domain.atlassian.net
+                  confluenceParentId: 123456
+                  atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
+                  atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
+                  folderToPublish: docs
+                  contentRoot: .
 ```
 
 ### Example using a config file
@@ -36,11 +36,11 @@ Create a `.markdown-confluence.json` file in your repository with the following 
 
 ```json
 {
-  "confluenceBaseUrl": "https://your-domain.atlassian.net",
-  "confluenceParentId": "123456",
-  "atlassianUserName": "your-email@example.com",
-  "folderToPublish": "docs",
-  "contentRoot": "."
+	"confluenceBaseUrl": "https://your-domain.atlassian.net",
+	"confluenceParentId": "123456",
+	"atlassianUserName": "your-email@example.com",
+	"folderToPublish": "docs",
+	"contentRoot": "."
 }
 ```
 
@@ -51,23 +51,22 @@ name: Publish to Confluence
 on: push
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-      
-      - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish-action@v6
-        with:
-          configFile: .markdown-confluence.json
-          atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
-```
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
 
+            - name: Publish Markdown to Confluence
+              uses: markdown-confluence/publish-action@v7
+              with:
+                  configFile: .markdown-confluence.json
+                  atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
+```
 
 ## Input Options
 
-This section provides an overview of all the input options available for the `markdown-confluence/publish` GitHub Action and examples of how to use them in your workflows.
+This section provides an overview of all the input options available for the `markdown-confluence/publish-action` GitHub Action and examples of how to use them in your workflows.
 
 ### confluenceBaseUrl
 
@@ -77,7 +76,7 @@ Example:
 
 ```yaml
 with:
-  confluenceBaseUrl: https://your-domain.atlassian.net
+    confluenceBaseUrl: https://your-domain.atlassian.net
 ```
 
 ### confluenceParentId
@@ -88,7 +87,7 @@ Example:
 
 ```yaml
 with:
-  confluenceParentId: 123456
+    confluenceParentId: 123456
 ```
 
 ### atlassianUserName
@@ -99,7 +98,7 @@ Example:
 
 ```yaml
 with:
-  atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
+    atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
 ```
 
 ### atlassianApiToken
@@ -110,7 +109,7 @@ Example:
 
 ```yaml
 with:
-  atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
+    atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
 ```
 
 ### folderToPublish
@@ -121,7 +120,7 @@ Example:
 
 ```yaml
 with:
-  folderToPublish: docs
+    folderToPublish: docs
 ```
 
 ### contentRoot
@@ -132,7 +131,7 @@ Example:
 
 ```yaml
 with:
-  contentRoot: .
+    contentRoot: .
 ```
 
 ### configFile
@@ -143,7 +142,7 @@ Example:
 
 ```yaml
 with:
-  configFile: .markdown-confluence.json
+    configFile: .markdown-confluence.json
 ```
 
 ## Advanced Example
@@ -155,22 +154,22 @@ name: Publish to Confluence
 on: push
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-      
-      - name: Publish Markdown to Confluence
-        uses: markdown-confluence/publish-action@v6
-        with:
-          confluenceBaseUrl: https://your-domain.atlassian.net
-          confluenceParentId: 123456
-          atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
-          atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
-          folderToPublish: docs
-          contentRoot: .
-          configFile: .markdown-confluence.json
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Publish Markdown to Confluence
+              uses: markdown-confluence/publish-action@v7
+              with:
+                  confluenceBaseUrl: https://your-domain.atlassian.net
+                  confluenceParentId: 123456
+                  atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
+                  atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
+                  folderToPublish: docs
+                  contentRoot: .
+                  configFile: .markdown-confluence.json
 ```
 
 Remember to create and configure the `.markdown-confluence.json` file in your repository as needed.
@@ -196,16 +195,16 @@ For example, this scans the whole repository but publishes files under `docs`:
 
 ```yaml
 with:
-  contentRoot: .
-  folderToPublish: docs
+    contentRoot: .
+    folderToPublish: docs
 ```
 
 This scans only the `docs` directory and publishes every Markdown file found there:
 
 ```yaml
 with:
-  contentRoot: docs
-  folderToPublish: .
+    contentRoot: docs
+    folderToPublish: .
 ```
 
 ### Storing API token as a repository secret
@@ -219,7 +218,6 @@ To store your Atlassian API token as a repository secret, follow these steps:
 5. Click on the "Add secret" button.
 
 Now you can reference the `ATLASSIAN_API_TOKEN` secret in your GitHub Actions workflows using the syntax `${{ secrets.ATLASSIAN_API_TOKEN }}`.
-
 
 ## Support
 
@@ -238,3 +236,50 @@ Use `confluenceAuthType: oauth2`, `atlassianClientId` and `atlassianClientSecret
 `tagsToPublish` selects additional YAML-tagged notes. `mermaidProtocolTimeout` raises the rendering timeout for large diagrams. PlantUML is opt-in through `plantumlEnabled` and `plantumlServerUrl`; source text is sent to that server. Other settings, including page headers, footers and ignored languages, can be supplied in the configuration file.
 
 Read the [version 6 migration guide](https://github.com/markdown-confluence/markdown-confluence/blob/main/documentation/MIGRATING_TO_6.md) before updating an existing publishing tree.
+
+## Cloud authentication and v7 inputs
+
+This version requires the v7 CLI image containing Kroki support. Release the main repository and verify that image before merging/releasing this action update. The action uses the upstream image, never a fork-specific quick-deploy image.
+
+Unscoped API tokens use your site URL as `confluenceBaseUrl`. Scoped API tokens use `https://api.atlassian.com/ex/confluence/CLOUD_ID` as `confluenceBaseUrl` and your site URL as `confluenceSiteUrl`; both token types need `atlassianUserName` and `atlassianApiToken`. Store tokens in GitHub secrets.
+
+For an OAuth service account:
+
+```yaml
+- uses: markdown-confluence/publish-action@v7
+  with:
+      confluenceAuthType: oauth2
+      confluenceBaseUrl: https://api.atlassian.com/ex/confluence/CLOUD_ID
+      confluenceSiteUrl: https://your-domain.atlassian.net
+      confluenceParentId: "123456"
+      atlassianClientId: ${{ secrets.ATLASSIAN_CLIENT_ID }}
+      atlassianClientSecret: ${{ secrets.ATLASSIAN_CLIENT_SECRET }}
+      folderToPublish: docs
+      contentRoot: .
+```
+
+Browser/device login is interactive and is not used by this action. `confluenceApiPrefix` was removed: this product supports Confluence Cloud and manages API paths internally.
+
+## Validation, planning and JSON reports
+
+Set `command: validate` for offline Markdown validation, `command: plan` for read-only Cloud discovery, or leave it as `publish`. Validation needs no credentials. Planning needs the same credentials as publishing but never creates pages or updates frontmatter. Existing pages are reported as `reconcile`, not assumed unchanged.
+
+Set `reportPath: confluence-report.json` to save JSON in the checked-out workspace (or `-` for stdout). A failed publish still returns a nonzero exit status. To retain reports on failures, use an `actions/upload-artifact` step with `if: always()` and the same path. The report's parent directory must already exist.
+
+## Rendering and publishing controls
+
+```yaml
+with:
+    krokiEnabled: "true"
+    krokiServerUrl: https://kroki.example.com
+    krokiFormat: png
+    krokiTimeoutMs: "30000"
+    firstHeadingPageTitle: "true"
+    lockPublishedPages: "false"
+```
+
+Only explicitly enabled `kroki-*` fences are sent to Kroki. Use a server you trust; private diagram source leaves the GitHub runner. Confluence credentials are not sent to the renderer. `forceOverwrite` is opt-in and permits overwriting pages last edited by someone else.
+
+Use `configFile` for richer settings such as `foldersToExclude`, `orderPages`, `jiraUrl` and `mermaid` options. Inputs override matching config-file values only when nonempty.
+
+These updates selectively continue the usage/input improvements reviewed in the daniel-luper, TwanVB and ViktorLindgren95 forks. Server-only authentication, obsolete API prefixes and fork-specific images are not imported.

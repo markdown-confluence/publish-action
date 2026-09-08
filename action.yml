@@ -1,61 +1,86 @@
-name: 'markdown-confluence'
-description: 'Publish Markdown files to Confluence'
+name: "markdown-confluence"
+description: "Publish Markdown files to Confluence"
 branding:
-  icon: 'file-text'
-  color: 'green'
+    icon: "file-text"
+    color: "green"
 inputs:
-  confluenceBaseUrl:
-    description: 'The base URL of your Confluence instance. For Confluence Cloud, use the Atlassian site URL without /wiki, for example https://your-domain.atlassian.net.'
-  confluenceParentId:
-    description: 'The ID of the existing parent page in Confluence where Markdown files will be published as child pages. The parent page determines the target space.'
-  atlassianUserName:
-    description: 'Your Atlassian account''s username, required for authentication when interacting with Confluence.'
-  atlassianApiToken:
-    description: 'An API token generated for your Atlassian account, used for authentication when making API calls to Confluence.'
-  folderToPublish:
-    description: 'The folder, relative to contentRoot, that should default to connie-publish: true.'
-  contentRoot:
-    description: 'The root path the action searches for Markdown files and referenced content. Use . for the checked-out repository.'
-  configFile:
-    description: 'A configuration file containing additional settings and customizations for the publishing process.'
-  confluenceSiteUrl:
-    description: "Browsable Confluence site URL when the API base URL is an OAuth gateway."
-  confluenceAuthType:
-    description: "Authentication method: basic, bearer or oauth2."
-  atlassianClientId:
-    description: "OAuth service-account client ID. Store credentials in GitHub secrets."
-  atlassianClientSecret:
-    description: "OAuth service-account client secret."
-  confluenceApiPrefix:
-    description: "Optional REST API prefix for custom endpoints."
-  confluenceRequestHeaders:
-    description: "Optional JSON object of extra request headers."
-  tagsToPublish:
-    description: "Comma-separated YAML tags selecting additional notes."
-  mermaidProtocolTimeout:
-    description: "Positive Puppeteer protocol timeout in milliseconds; default 180000."
-  plantumlEnabled:
-    description: "Enable PlantUML rendering explicitly; diagram source goes to the configured server."
-  plantumlServerUrl:
-    description: "PlantUML server trusted to receive diagram source."
+    confluenceBaseUrl:
+        description: "The base URL of your Confluence instance. For Confluence Cloud, use the Atlassian site URL without /wiki, for example https://your-domain.atlassian.net."
+    confluenceParentId:
+        description: "The ID of the existing parent page in Confluence where Markdown files will be published as child pages. The parent page determines the target space."
+    atlassianUserName:
+        description: "Your Atlassian account's username, required for authentication when interacting with Confluence."
+    atlassianApiToken:
+        description: "An API token generated for your Atlassian account, used for authentication when making API calls to Confluence."
+    folderToPublish:
+        description: "The folder, relative to contentRoot, that should default to connie-publish: true."
+    contentRoot:
+        description: "The root path the action searches for Markdown files and referenced content. Use . for the checked-out repository."
+    configFile:
+        description: "A configuration file containing additional settings and customizations for the publishing process."
+    confluenceSiteUrl:
+        description: "Browsable Confluence site URL when the API base URL is an OAuth gateway."
+    confluenceAuthType:
+        description: "Authentication method: basic, bearer or oauth2."
+    atlassianClientId:
+        description: "OAuth service-account client ID. Store credentials in GitHub secrets."
+    atlassianClientSecret:
+        description: "OAuth service-account client secret."
+    confluenceRequestHeaders:
+        description: "Optional JSON object of extra request headers."
+    tagsToPublish:
+        description: "Comma-separated YAML tags selecting additional notes."
+    mermaidProtocolTimeout:
+        description: "Positive Puppeteer protocol timeout in milliseconds; default 180000."
+    plantumlEnabled:
+        description: "Enable PlantUML rendering explicitly; diagram source goes to the configured server."
+    plantumlServerUrl:
+        description: "PlantUML server trusted to receive diagram source."
+    command:
+        description: "publish (default), validate (offline), or plan (read-only Cloud discovery)."
+        default: "publish"
+    reportPath:
+        description: "Optional workspace-relative JSON output file, or - for stdout."
+    firstHeadingPageTitle:
+        description: "Use the first Markdown heading as the page title."
+    forceOverwrite:
+        description: "Explicitly allow overwriting pages last edited by another user."
+    lockPublishedPages:
+        description: "Restrict editing of published pages to the publishing account."
+    krokiEnabled:
+        description: "Enable kroki-* rendering; sends diagram source to the configured server."
+    krokiServerUrl:
+        description: "Trusted Kroki HTTP(S) server URL; no Confluence credentials are sent to it."
+    krokiFormat:
+        description: "Kroki output format: png or svg."
+    krokiTimeoutMs:
+        description: "Kroki rendering timeout in milliseconds; default 30000."
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  env:
-    CONFLUENCE_BASE_URL: ${{ inputs.confluenceBaseUrl }}
-    CONFLUENCE_PARENT_ID: ${{ inputs.confluenceParentId }}
-    ATLASSIAN_USERNAME: ${{ inputs.atlassianUserName }}
-    ATLASSIAN_API_TOKEN: ${{ inputs.atlassianApiToken }}
-    FOLDER_TO_PUBLISH: ${{ inputs.folderToPublish }}
-    CONFLUENCE_CONTENT_ROOT: ${{ inputs.contentRoot }}
-    CONFLUENCE_CONFIG_FILE: ${{ inputs.configFile }}
-    CONFLUENCE_SITE_URL: ${{ inputs.confluenceSiteUrl }}
-    CONFLUENCE_AUTH_TYPE: ${{ inputs.confluenceAuthType }}
-    ATLASSIAN_CLIENT_ID: ${{ inputs.atlassianClientId }}
-    ATLASSIAN_CLIENT_SECRET: ${{ inputs.atlassianClientSecret }}
-    CONFLUENCE_API_PREFIX: ${{ inputs.confluenceApiPrefix }}
-    CONFLUENCE_REQUEST_HEADERS: ${{ inputs.confluenceRequestHeaders }}
-    CONFLUENCE_TAGS_TO_PUBLISH: ${{ inputs.tagsToPublish }}
-    CONFLUENCE_MERMAID_PROTOCOL_TIMEOUT: ${{ inputs.mermaidProtocolTimeout }}
-    CONFLUENCE_PLANTUML_ENABLED: ${{ inputs.plantumlEnabled }}
-    CONFLUENCE_PLANTUML_SERVER_URL: ${{ inputs.plantumlServerUrl }}
+    using: "docker"
+    image: "Dockerfile"
+    env:
+        CONFLUENCE_BASE_URL: ${{ inputs.confluenceBaseUrl }}
+        CONFLUENCE_PARENT_ID: ${{ inputs.confluenceParentId }}
+        ATLASSIAN_USERNAME: ${{ inputs.atlassianUserName }}
+        ATLASSIAN_API_TOKEN: ${{ inputs.atlassianApiToken }}
+        FOLDER_TO_PUBLISH: ${{ inputs.folderToPublish }}
+        CONFLUENCE_CONTENT_ROOT: ${{ inputs.contentRoot }}
+        CONFLUENCE_CONFIG_FILE: ${{ inputs.configFile }}
+        CONFLUENCE_SITE_URL: ${{ inputs.confluenceSiteUrl }}
+        CONFLUENCE_AUTH_TYPE: ${{ inputs.confluenceAuthType }}
+        ATLASSIAN_CLIENT_ID: ${{ inputs.atlassianClientId }}
+        ATLASSIAN_CLIENT_SECRET: ${{ inputs.atlassianClientSecret }}
+        CONFLUENCE_REQUEST_HEADERS: ${{ inputs.confluenceRequestHeaders }}
+        CONFLUENCE_TAGS_TO_PUBLISH: ${{ inputs.tagsToPublish }}
+        CONFLUENCE_MERMAID_PROTOCOL_TIMEOUT: ${{ inputs.mermaidProtocolTimeout }}
+        CONFLUENCE_PLANTUML_ENABLED: ${{ inputs.plantumlEnabled }}
+        CONFLUENCE_PLANTUML_SERVER_URL: ${{ inputs.plantumlServerUrl }}
+        CONFLUENCE_ACTION_COMMAND: ${{ inputs.command }}
+        CONFLUENCE_ACTION_REPORT_PATH: ${{ inputs.reportPath }}
+        CONFLUENCE_FIRST_HEADING_PAGE_TITLE: ${{ inputs.firstHeadingPageTitle }}
+        CONFLUENCE_FORCE_OVERWRITE: ${{ inputs.forceOverwrite }}
+        CONFLUENCE_LOCK_PUBLISHED_PAGES: ${{ inputs.lockPublishedPages }}
+        CONFLUENCE_KROKI_ENABLED: ${{ inputs.krokiEnabled }}
+        CONFLUENCE_KROKI_SERVER_URL: ${{ inputs.krokiServerUrl }}
+        CONFLUENCE_KROKI_FORMAT: ${{ inputs.krokiFormat }}
+        CONFLUENCE_KROKI_TIMEOUT_MS: ${{ inputs.krokiTimeoutMs }}
